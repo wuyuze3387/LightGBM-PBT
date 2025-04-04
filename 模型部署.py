@@ -133,7 +133,7 @@ if st.button("Predict"):
     )
 
     # 创建SHAP瀑布图
-    plt.figure(figsize=(8, 6))  # 设置图形尺寸
+    plt.figure(figsize=(6, 4))  # 设置图形尺寸
     shap.plots.waterfall(
         explanation,
         max_display=14,  # 显示前14个最重要的特征

@@ -128,7 +128,7 @@ if st.button("Predict"):
 ])
 
 # 创建SHAP力图，确保中文显示
-plt.figure(figsize=(20, 6))  # 设置图形尺寸为12x6英寸
+plt.figure(figsize=(40, 6))  # 设置图形尺寸为12x6英寸
 shap.force_plot(
     base_value, 
     shap_values_sample, 

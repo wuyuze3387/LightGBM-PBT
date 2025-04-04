@@ -78,6 +78,42 @@ for feature, properties in feature_ranges.items():
 # 转换为模型输入格式
 features = np.array([feature_values])
 
+# 定义特征名称和其对应的值
+features_with_values = np.array([
+    f"Age={feature_values[0]}",
+    f"Weight={feature_values[1]}",
+    f"Residence={feature_values[2]}",
+    f"Marriage={feature_values[3]}",
+    f"Employment={feature_values[4]}",
+    f"Educational Level={feature_values[5]}",
+    f"Medical Insurance={feature_values[6]}",
+    f"Pregnancies={feature_values[7]}",
+    f"Deliveries={feature_values[8]}",
+    f"Delivery Method={feature_values[9]}",
+    f"Adverse Pregnancy History={feature_values[10]}",
+    f"Terminated Pregnancy={feature_values[11]}",
+    f"Pregnancy Weeks={feature_values[12]}",
+    f"Comorbidities={feature_values[13]}",
+    f"Complications={feature_values[14]}",
+    f"Feeding={feature_values[15]}",
+    f"Newborn Defects={feature_values[16]}",
+    f"Monthly Income Per Capita={feature_values[17]}",
+    f"Painless Childbirth={feature_values[18]}",
+    f"Intrapartum pain={feature_values[19]}",
+    f"Postpartum Pain={feature_values[20]}",
+    f"Care Methods={feature_values[21]}",
+    f"Sleep Quality={feature_values[22]}",
+    f"Sleep Duration={feature_values[23]}",
+    f"Fatigue={feature_values[24]}",
+    f"Activity={feature_values[25]}",
+    f"Depression={feature_values[26]}",
+    f"Anxiety={feature_values[27]}",
+    f"Intrusive Rumination={feature_values[28]}",
+    f"Purposeful Rumination={feature_values[29]}",
+    f"Resilience={feature_values[30]}",
+    f"Family Support={feature_values[31]}"
+])
+
 # 预测与 SHAP 可视化
 if st.button("Predict"):
     # 模型预测
@@ -97,7 +133,7 @@ if st.button("Predict"):
     )
 
     # 创建SHAP瀑布图
-    plt.figure(figsize=(12, 8))  # 设置图形尺寸
+    plt.figure(figsize=(8, 6))  # 设置图形尺寸
     shap.plots.waterfall(
         explanation,
         max_display=14,  # 显示前14个最重要的特征

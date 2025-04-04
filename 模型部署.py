@@ -4,12 +4,10 @@ import numpy as np
 import pandas as pd
 import shap
 import matplotlib.pyplot as plt
-import requests
-from PIL import Image
-from io import BytesIO
+from matplotlib.font_manager import FontProperties
 
 # 设置matplotlib支持中文和负号
-plt.rcParams['font.sans-serif'] = 'SimHei'
+plt.rcParams['font.sans-serif'] = ['SimHei']  # 使用SimHei字体支持中文
 plt.rcParams['axes.unicode_minus'] = False
 
 # 加载模型
@@ -141,7 +139,7 @@ if st.button("Predict"):
         show=False
     )
     st.pyplot(force_plot)
-    
+
     # 添加特征说明
     st.write("### 特征说明")
     st.write("以下是每个特征的含义：")

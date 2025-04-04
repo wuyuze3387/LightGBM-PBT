@@ -82,7 +82,7 @@ features = np.array([feature_values])
 if st.button("Predict"):
     # 模型预测
     predicted_value = model.predict(features)[0]
-    st.write(f"Predicted 分娩心理创伤 score: {predicted_value:.2f}")
+    st.write(f"Predicted 分娩心理创伤 score: {predicted_value:.2f}%")
 
     # SHAP 解释器
     explainer = shap.TreeExplainer(model)

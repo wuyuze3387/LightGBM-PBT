@@ -130,13 +130,15 @@ if st.button("Predict"):
 
     # SHAP 力图
     st.write("### SHAP 力图")
+    font_prop = FontProperties(fname='simhei.ttf')  # 指定字体文件路径
     force_plot = shap.force_plot(
         base_value,
         shap_values_sample,
         features_with_values,
         feature_names=list(feature_ranges.keys()),
         matplotlib=True,
-        show=False
+        show=False,
+        font_properties=font_prop  # 传递字体属性
     )
     st.pyplot(force_plot)
 

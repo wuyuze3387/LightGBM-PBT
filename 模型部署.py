@@ -56,8 +56,8 @@ feature_ranges = {
 }
 
 # 动态生成输入项
-st.sidebar.header("特征输入区域")
-st.sidebar.write("请输入特征值：")
+st.sidebar.header("变量输入区域")
+st.sidebar.write("请输入变量值：")
 
 feature_values = []
 for feature, properties in feature_ranges.items():
@@ -140,70 +140,74 @@ if st.button("Predict"):
     )
     st.pyplot(force_plot)
 
-    # 添加变量含义表格
-    st.write("### 变量含义")
-    feature_descriptions = {
-        "X1": "年龄",
-        "X2": "体重",
-        "X3": "居住地",
-        "X4": "婚姻状况",
-        "X5": "就业情况",
-        "X6": "学历",
-        "X7": "医疗费用支付方式",
-        "X8": "怀孕次数",
-        "X9": "分娩次数",
-        "X10": "分娩方式",
-        "X11": "不良孕产史",
-        "X12": "终止妊娠经历",
-        "X13": "妊娠周数",
-        "X14": "妊娠合并症",
-        "X15": "妊娠并发症",
-        "X16": "喂养方式",
-        "X17": "新生儿是否有出生缺陷或疾病",
-        "X18": "家庭人均月收入",
-        "X19": "使用无痛分娩技术",
-        "X20": "产时疼痛",
-        "X21": "产后疼痛",
-        "X22": "产后照顾婴儿方式",
-        "X23": "近1月睡眠质量",
-        "X24": "近1月夜间睡眠时长",
-        "X25": "近1月困倦程度",
-        "X26": "孕期体育活动等级",
-        "X27": "抑郁",
-        "X28": "焦虑",
-        "X29": "侵入性反刍性沉思",
-        "X30": "目的性反刍性沉思",
-        "X31": "心理弹性",
-        "X32": "家庭支持"
-    }
+# 添加变量含义表格
+st.write("### 变量含义")
 
-    # 构建HTML表格
-    table_html = "<table><tr><th>变量</th><th>含义</th></tr>"
-    for key, value in feature_descriptions.items():
-        table_html += f"<tr><td>{key}</td><td>{value}</td></tr>"
-    table_html += "</table>"
+feature_descriptions = {
+    "X1": "年龄",
+    "X2": "体重",
+    "X3": "居住地",
+    "X4": "婚姻状况",
+    "X5": "就业情况",
+    "X6": "学历",
+    "X7": "医疗费用支付方式",
+    "X8": "怀孕次数",
+    "X9": "分娩次数",
+    "X10": "分娩方式",
+    "X11": "不良孕产史",
+    "X12": "终止妊娠经历",
+    "X13": "妊娠周数",
+    "X14": "妊娠合并症",
+    "X15": "妊娠并发症",
+    "X16": "喂养方式",
+    "X17": "新生儿是否有出生缺陷或疾病",
+    "X18": "家庭人均月收入",
+    "X19": "使用无痛分娩技术",
+    "X20": "产时疼痛",
+    "X21": "产后疼痛",
+    "X22": "产后照顾婴儿方式",
+    "X23": "近1月睡眠质量",
+    "X24": "近1月夜间睡眠时长",
+    "X25": "近1月困倦程度",
+    "X26": "孕期体育活动等级",
+    "X27": "抑郁",
+    "X28": "焦虑",
+    "X29": "侵入性反刍性沉思",
+    "X30": "目的性反刍性沉思",
+    "X31": "心理弹性",
+    "X32": "家庭支持"
+}
 
-    # 设置表格样式
-    table_html = f"""
-    <style>
-        table {{
-            width: 100%;
-            border-collapse: collapse;
-        }}
-        th, td {{
-            border: 1px solid #dddddd;
-            text-align: left;
-            padding: 8px;
-        }}
-        th {{
-            background-color: #f2f2f2;
-        }}
-        tr:nth-child(even) {{
-            background-color: #f9f9f9;
-        }}
-    </style>
-    {table_html}
-    """
+# 构建HTML表格
+table_html = "<table><tr><th>变量</th><th>含义</th></tr>"
+for key, value in feature_descriptions.items():
+    table_html += f"<tr><td>{key}</td><td>{value}</td></tr>"
+table_html += "</table>"
 
-    # 显示表格
-    st.write(table_html, unsafe_allow_html=True)
+# 设置表格样式为三线表
+table_html = f"""
+<style>
+    table {{
+        width: 100%;
+        border-collapse: collapse;
+    }}
+    th, td {{
+        text-align: left;
+        padding: 8px;
+    }}
+    th {{
+        border-top: 2px solid #000000;
+        border-bottom: 1px solid #000000;
+    }}
+    td {{
+        border-bottom: 1px solid #000000;
+    }}
+    tr:last-child td {{
+        border-bottom: 2px solid #000000;
+    }}
+</style>
+{table_html}
+"""
+
+# 显示表格
+st.write(table_html, unsafe_allow_html=True)

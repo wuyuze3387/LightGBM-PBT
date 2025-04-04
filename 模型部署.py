@@ -98,16 +98,16 @@ if st.button("Predict"):
     f"Residence={feature_values[2]}",
     f"Marriage={feature_values[3]}",
     f"Employment={feature_values[4]}",
-    f"Education={feature_values[5]}",
-    f"Insurance={feature_values[6]}",
-    f"Pregnancies={feature_values[7]}",
-    f"Deliveries={feature_values[8]}",
+    f"Educational Level={feature_values[5]}",
+    f"Medical Insurance={feature_values[6]}",
+    f"Number of Pregnancies={feature_values[7]}",
+    f"Number of Deliveries={feature_values[8]}",
     f"Delivery Method={feature_values[9]}",
     f"Adverse Pregnancy History={feature_values[10]}",
     f"Terminated Pregnancy={feature_values[11]}",
     f"Pregnancy Weeks={feature_values[12]}",
-    f"Comorbidities={feature_values[13]}",
-    f"Complications={feature_values[14]}",
+    f"Pregnancy Comorbidities={feature_values[13]}",
+    f"Pregnancy Complications={feature_values[14]}",
     f"Feeding Method={feature_values[15]}",
     f"Newborn Defects={feature_values[16]}",
     f"Monthly Income Per Capita={feature_values[17]}",
@@ -127,17 +127,16 @@ if st.button("Predict"):
     f"Family Support={feature_values[31]}"
 ])
 
-# 创建SHAP力图，确保中文显示
-plt.figure(figsize=(40, 6))  # 设置图形尺寸为12x6英寸
-shap.force_plot(
-    base_value, 
-    shap_values_sample, 
-    features_with_values, 
-    matplotlib=True,  # 使用Matplotlib显示
-    show=False  # 不显示默认的力图窗口
-)
+    # 创建SHAP力图，确保中文显示
+    shap.force_plot(
+        base_value, 
+        shap_values_sample, 
+        features_with_values, 
+        matplotlib=True,  # 使用Matplotlib显示
+        show=False,  # 不显示默认的力图窗口
+        feature_names=[f"\n{f}\n" for f in list(feature_ranges.keys())]  # 竖向显示特征名称
+    )
 
-
-# 保存SHAP力图并展示
-plt.savefig("shap_force_plot.png", bbox_inches='tight', dpi=1000)
-st.image("shap_force_plot.png")
+    # 保存SHAP力图并展示
+    plt.savefig("shap_force_plot.png", bbox_inches='tight', dpi=600)
+    st.image("shap_force_plot.png")

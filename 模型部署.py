@@ -8,7 +8,6 @@ import requests
 from PIL import Image
 from io import BytesIO
 
-
 # 设置matplotlib支持中文和负号
 plt.rcParams['font.sans-serif'] = 'SimHei'
 plt.rcParams['axes.unicode_minus'] = False
@@ -91,19 +90,55 @@ if st.button("Predict"):
     explainer = shap.TreeExplainer(model)
     shap_values = explainer.shap_values(features)
 
+    # 获取基础值和第一个样本的 SHAP 值
+    base_value = explainer.expected_value
+    shap_values_sample = shap_values[0]
+
+    # 定义特征名称和其对应的值
+    features_with_values = np.array([
+        f"Age={feature_values[0]}",
+        f"Weight={feature_values[1]}",
+        f"Residence={feature_values[2]}",
+        f"Marital Status={feature_values[3]}",
+        f"Employment={feature_values[4]}",
+        f"Educational level={feature_values[5]}",
+        f"Medical insurance={feature_values[6]}",
+        f"Pregnancies={feature_values[7]}",
+        f"Deliveries={feature_values[8]}",
+        f"Delivery method={feature_values[9]}",
+        f"Adverse pregnancy={feature_values[10]}",
+        f"Adverse obstetric history={feature_values[11]}",
+        f"Gestational age={feature_values[12]}",
+        f"Pregnancy comorbidities={feature_values[13]}",
+        f"Pregnancy Complications={feature_values[14]}",
+        f"Feeding method={feature_values[15]}",
+        f"Newborn defects={feature_values[16]}",
+        f"Per capita monthly family income={feature_values[17]}",
+        f"Painless childbirth technology={feature_values[18]}",
+        f"Intrapartum pain={feature_values[19]}",
+        f"Postpartum Pain={feature_values[20]}",
+        f"Infant care method={feature_values[21]}",
+        f"Sleep quality={feature_values[22]}",
+        f"Sleep time={feature_values[23]}",
+        f"Fatigue={feature_values[24]}",
+        f"Physical activity level={feature_values[25]}",
+        f"Depression={feature_values[26]}",
+        f"Anxiety={feature_values[27]}",
+        f"Intrusive rumination={feature_values[28]}",
+        f"Purposeful rumination={feature_values[29]}",
+        f"Resilience={feature_values[30]}",
+        f"Family support={feature_values[31]}"
+    ])
+
     # SHAP 力图
     st.write("### SHAP 力图")
     force_plot = shap.force_plot(
-        explainer.expected_value,
-        shap_values[0, :],
-        features[0, :],
+        base_value,
+        shap_values_sample,
+        features_with_values,
         feature_names=list(feature_ranges.keys()),
         matplotlib=True,
         show=False
     )
     st.pyplot(force_plot)
-
-    # 保存SHAP力图为HTML文件并在Streamlit中显示
-    # shap.save_html('shap_plot.html', force_plot)
-    # st.components.v1.html(open('shap_plot.html').read(), height=600)
 

@@ -54,7 +54,6 @@ feature_ranges = {
     "心理弹性": {"type": "numerical", "min": 6, "max": 30, "default": 6},
     "家庭支持": {"type": "numerical", "min": 0, "max": 10, "default": 0},
 }
-
 # 动态生成输入项
 st.sidebar.header("变量输入区域")
 st.sidebar.write("请输入变量值：")
@@ -93,67 +92,52 @@ if st.button("Predict"):
     shap_values_sample = shap_values[0]
 
     # 定义特征名称和其对应的值
-    feature_names = list(feature_ranges.keys())
     features_with_values = np.array([
-        f"Age={feature_values[0]}",
-        f"Weight={feature_values[1]}",
-        f"Residence={feature_values[2]}",
-        f"Marriage={feature_values[3]}",
-        f"Employment={feature_values[4]}",
-        f"Educational Level={feature_values[5]}",
-        f"Medical Insurance={feature_values[6]}",
-        f"Pregnancies={feature_values[7]}",
-        f"Deliveries={feature_values[8]}",
-        f"Delivery Method={feature_values[9]}",
-        f"Adverse Pregnancy History={feature_values[10]}",
-        f"Terminated Pregnancy={feature_values[11]}",
-        f"Pregnancy Weeks={feature_values[12]}",
-        f"Comorbidities={feature_values[13]}",
-        f"Complications={feature_values[14]}",
-        f"Feeding={feature_values[15]}",
-        f"Newborn Defects={feature_values[16]}",
-        f"Monthly Income Per Capita={feature_values[17]}",
-        f"Painless Childbirth={feature_values[18]}",
-        f"Intrapartum pain={feature_values[19]}",
-        f"Postpartum Pain={feature_values[20]}",
-        f"Care Methods={feature_values[21]}",
-        f"Sleep Quality={feature_values[22]}",
-        f"Sleep Duration={feature_values[23]}",
-        f"Fatigue={feature_values[24]}",
-        f"Activity={feature_values[25]}",
-        f"Depression={feature_values[26]}",
-        f"Anxiety={feature_values[27]}",
-        f"Intrusive Rumination={feature_values[28]}",
-        f"Purposeful Rumination={feature_values[29]}",
-        f"Resilience={feature_values[30]}",
-        f"Family Support={feature_values[31]}"
-    ])
+    f"Age={feature_values[0]}",
+    f"Weight={feature_values[1]}",
+    f"Residence={feature_values[2]}",
+    f"Marriage={feature_values[3]}",
+    f"Employment={feature_values[4]}",
+    f"Educational Level={feature_values[5]}",
+    f"Medical Insurance={feature_values[6]}",
+    f"Pregnancies={feature_values[7]}",
+    f"Deliveries={feature_values[8]}",
+    f"Delivery Method={feature_values[9]}",
+    f"Adverse Pregnancy History={feature_values[10]}",
+    f"Terminated Pregnancy={feature_values[11]}",
+    f"Pregnancy Weeks={feature_values[12]}",
+    f"Comorbidities={feature_values[13]}",
+    f"Complications={feature_values[14]}",
+    f"Feeding={feature_values[15]}",
+    f"Newborn Defects={feature_values[16]}",
+    f"Monthly Income Per Capita={feature_values[17]}",
+    f"Painless Childbirth={feature_values[18]}",
+    f"Intrapartum pain={feature_values[19]}",
+    f"Postpartum Pain={feature_values[20]}",
+    f"Care Methods={feature_values[21]}",
+    f"Sleep Quality={feature_values[22]}",
+    f"Sleep Duration={feature_values[23]}",
+    f"Fatigue={feature_values[24]}",
+    f"Activity={feature_values[25]}",
+    f"Depression={feature_values[26]}",
+    f"Anxiety={feature_values[27]}",
+    f"Intrusive Rumination={feature_values[28]}",
+    f"Purposeful Rumination={feature_values[29]}",
+    f"Resilience={feature_values[30]}",
+    f"Family Support={feature_values[31]}"
+])
 
-    # 按 SHAP 值的绝对值排序特征
-    feature_importance = np.abs(shap_values_sample)
-    sorted_idx = np.argsort(feature_importance)[::-1]
+# 创建SHAP力图，确保中文显示
+plt.figure(figsize=(40, 6))  # 设置图形尺寸为12x6英寸
+shap.force_plot(
+    base_value, 
+    shap_values_sample, 
+    features_with_values, 
+    matplotlib=True,  # 使用Matplotlib显示
+    show=False  # 不显示默认的力图窗口
+)
 
-    # 选择最重要的 6 个特征
-    top_features_idx = sorted_idx[:6]
-    top_feature_names = [feature_names[i] for i in top_features_idx]
-    top_shap_values = shap_values_sample[top_features_idx]
-    top_features_with_values = [features_with_values[i] for i in top_features_idx]
 
-    # 创建SHAP力图，确保中文显示
-    plt.figure(figsize=(20, 6))  # 设置图形尺寸为20x6英寸
-    force_plot = shap.force_plot(
-        base_value,
-        top_shap_values,
-        top_features_with_values,
-        feature_names=top_feature_names,
-        matplotlib=True,  # 使用Matplotlib显示
-        show=False  # 不显示默认的力图窗口
-    )
-
-    # 保存并展示SHAP力图
-    plt.savefig("shap_force_plot.png", bbox_inches='tight', dpi=600)
-    st.pyplot(force_plot)
-
-    # 保存并展示SHAP瀑布图
-    plt.savefig("shap_waterfall_plot.png", bbox_inches='tight', dpi=600)
-    st.image("shap_waterfall_plot.png")
+# 保存SHAP力图并展示
+plt.savefig("shap_force_plot.png", bbox_inches='tight', dpi=1000)
+st.image("shap_force_plot.png")

@@ -124,7 +124,7 @@ if st.button("Predict"):
     f"Intrusive Rumination={feature_values[28]}",
     f"Purposeful Rumination={feature_values[29]}",
     f"Resilience={feature_values[30]}",
-    f"Fami_Support={feature_values[31]}"
+    f"Fami_Supp={feature_values[31]}"
 ])
 
 # 创建SHAP力图，确保中文显示

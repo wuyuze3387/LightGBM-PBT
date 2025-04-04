@@ -141,7 +141,7 @@ if st.button("Predict"):
     st.pyplot(force_plot)
 
     # 添加特征说明表格
-    st.write("### 特征说明")
+    st.write("### 变量含义")
     feature_descriptions = {
         "X1": "年龄",
         "X2": "体重",
@@ -176,5 +176,5 @@ if st.button("Predict"):
         "X31": "心理弹性",
         "X32": "家庭支持"
     }
-    df = pd.DataFrame(feature_descriptions.items(), columns=["特征", "含义"])
+    df = pd.DataFrame(feature_descriptions.items(), columns=["变量", "含义"])
     st.table(df)

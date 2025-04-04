@@ -140,7 +140,7 @@ if st.button("Predict"):
     )
     st.pyplot(force_plot)
 
-    # 添加特征说明表格
+    # 添加变量含义表格
     st.write("### 变量含义")
     feature_descriptions = {
         "X1": "年龄",
@@ -176,5 +176,34 @@ if st.button("Predict"):
         "X31": "心理弹性",
         "X32": "家庭支持"
     }
-    df = pd.DataFrame(feature_descriptions.items(), columns=["变量", "含义"])
-    st.table(df)
+
+    # 构建HTML表格
+    table_html = "<table><tr><th>变量</th><th>含义</th></tr>"
+    for key, value in feature_descriptions.items():
+        table_html += f"<tr><td>{key}</td><td>{value}</td></tr>"
+    table_html += "</table>"
+
+    # 设置表格样式
+    table_html = f"""
+    <style>
+        table {{
+            width: 100%;
+            border-collapse: collapse;
+        }}
+        th, td {{
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }}
+        th {{
+            background-color: #f2f2f2;
+        }}
+        tr:nth-child(even) {{
+            background-color: #f9f9f9;
+        }}
+    </style>
+    {table_html}
+    """
+
+    # 显示表格
+    st.write(table_html, unsafe_allow_html=True)

@@ -127,15 +127,17 @@ if st.button("Predict"):
     f"Family Support={feature_values[31]}"
 ])
 
-    # 创建SHAP力图，确保中文显示
-    shap.force_plot(
-        base_value, 
-        shap_values_sample, 
-        features_with_values, 
-        matplotlib=True,  # 使用Matplotlib显示
-        show=False  # 不显示默认的力图窗口
-    )
+# 创建SHAP力图，确保中文显示
+plt.figure(figsize=(12, 6))  # 设置图形尺寸为12x6英寸
+shap.force_plot(
+    base_value, 
+    shap_values_sample, 
+    features_with_values, 
+    matplotlib=True,  # 使用Matplotlib显示
+    show=False  # 不显示默认的力图窗口
+)
 
-    # 保存SHAP力图并展示
-    plt.savefig("shap_force_plot.png", bbox_inches='tight', dpi=600)
-    st.image("shap_force_plot.png")
+
+# 保存SHAP力图并展示
+plt.savefig("shap_force_plot.png", bbox_inches='tight', dpi=600)
+st.image("shap_force_plot.png")

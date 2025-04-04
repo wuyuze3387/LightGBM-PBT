@@ -197,7 +197,7 @@ table_html = f"""
     }}
     th {{
         border-top: 2px solid #000000;
-        border-bottom: 1px solid #000000;
+        border-bottom: 2px solid #000000;
     }}
     td {{
         border-bottom: 1px solid #000000;

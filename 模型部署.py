@@ -88,14 +88,18 @@ if st.button("Predict"):
     explainer = shap.TreeExplainer(model)
     shap_values = explainer.shap_values(features)
 
-    # 获取基础值和第一个样本的 SHAP 值
-    base_value = explainer.expected_value
-    shap_values_sample = shap_values[0]
+    # 创建 SHAP Explanation 对象
+    explanation = shap.Explanation(
+        values=shap_values[0],
+        base_values=explainer.expected_value,
+        data=features[0],
+        feature_names=list(feature_ranges.keys())
+    )
 
     # 创建SHAP瀑布图
     plt.figure(figsize=(12, 8))  # 设置图形尺寸
     shap.plots.waterfall(
-        shap_values[0],
+        explanation,
         max_display=14,  # 显示前14个最重要的特征
         show=False
     )

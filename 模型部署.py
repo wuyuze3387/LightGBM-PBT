@@ -136,7 +136,7 @@ if st.button("Predict"):
     plt.figure(figsize=(6, 4))  # 设置图形尺寸
     shap.plots.waterfall(
         explanation,
-        max_display=14,  # 显示前14个最重要的特征
+        max_display=8,  # 显示前14个最重要的特征
         show=False
     )
 

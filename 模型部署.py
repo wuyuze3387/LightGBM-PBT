@@ -112,11 +112,11 @@ if st.button("Predict"):
     f"Newborn Defects={feature_values[16]}",
     f"Monthly Income Per Capita={feature_values[17]}",
     f"Painless Childbirth={feature_values[18]}",
-    f"Intrapartum pain={feature_values[19]}",
-    f"Postpartum Pain={feature_values[20]}",
+    f"Intra_pain={feature_values[19]}",
+    f"Post_Pain={feature_values[20]}",
     f"Care Methods={feature_values[21]}",
     f"Sleep Quality={feature_values[22]}",
-    f"Sleep Duration={feature_values[23]}",
+    f"Sleep Time={feature_values[23]}",
     f"Fatigue={feature_values[24]}",
     f"Activity={feature_values[25]}",
     f"Depression={feature_values[26]}",
@@ -124,7 +124,7 @@ if st.button("Predict"):
     f"Intrusive Rumination={feature_values[28]}",
     f"Purposeful Rumination={feature_values[29]}",
     f"Resilience={feature_values[30]}",
-    f"Family Support={feature_values[31]}"
+    f"Fami_Support={feature_values[31]}"
 ])
 
 # 创建SHAP力图，确保中文显示

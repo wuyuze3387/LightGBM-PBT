@@ -23,7 +23,7 @@ st.write("通过输入所有变量的值进行单个样本分娩心理创伤的�
 feature_ranges = {
     "年龄": {"type": "numerical", "min": 18, "max": 42, "default": 18},
     "体重": {"type": "numerical", "min": 52, "max": 91, "default": 52},
-    "居住地": {"type": "categorical", "options": [1, 2]},
+    "居住地": {"type": "categorical", "options": [农村, 城市]},
     "婚姻状况": {"type": "categorical", "options": [1, 2]},
     "就业情况": {"type": "categorical", "options": [1, 2]},
     "学历": {"type": "categorical", "options": [1, 2, 3, 4]},

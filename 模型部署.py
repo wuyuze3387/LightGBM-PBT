@@ -1,12 +1,13 @@
-# -*- coding: utf-8 -*-
 import streamlit as st
 import joblib
 import numpy as np
+import pandas as pd
 import shap
 import matplotlib.pyplot as plt
+import requests
 from PIL import Image
 from io import BytesIO
-import requests
+
 
 # 设置matplotlib支持中文和负号
 plt.rcParams['font.sans-serif'] = 'SimHei'
@@ -84,62 +85,25 @@ features = np.array([feature_values])
 if st.button("Predict"):
     # 模型预测
     predicted_value = model.predict(features)[0]
-    st.write(f"Predicted 分娩心理创伤 score: {predicted_value :.2f}%")
+    st.write(f"Predicted 分娩心理创伤 score: {predicted_value:.2f}")
 
     # SHAP 解释器
     explainer = shap.TreeExplainer(model)
     shap_values = explainer.shap_values(features)
 
-    # 获取指定样本的SHAP值
-    base_value = explainer.expected_value  # 基础值，模型的平均输出
-    shap_values_sample = shap_values[0]  # 获取第一个样本的SHAP值
-
-    # 定义特征名称和其对应的值
-    features_with_values = np.array([
-    f"Age={feature_values[0]}",
-    f"Weight={feature_values[1]}",
-    f"Residence={feature_values[2]}",
-    f"Marital Status={feature_values[3]}",
-    f"Employment={feature_values[4]}",
-    f"Educational level={feature_values[5]}",
-    f"Medical insurance={feature_values[6]}",
-    f"Pregnancies={feature_values[7]}",
-    f"Deliveries={feature_values[8]}",
-    f"Delivery method={feature_values[9]}",
-    f"Adverse pregnancy={feature_values[10]}",
-    f"Adverse obstetric history={feature_values[11]}",
-    f"Gestational age={feature_values[12]}",
-    f"Pregnancy comorbidities={feature_values[13]}",
-    f"Pregnancy Complications={feature_values[14]}",
-    f"Feeding method={feature_values[15]}",
-    f"Newborn defects={feature_values[16]}",
-    f"Per capita monthly family income={feature_values[17]}",
-    f"Painless childbirth technology={feature_values[18]}",
-    f"Intrapartum pain={feature_values[19]}",
-    f"Postpartum Pain={feature_values[20]}",
-    f"Infant care method={feature_values[21]}",
-    f"Sleep quality={feature_values[22]}",
-    f"Sleep time={feature_values[23]}",
-    f"Fatigue={feature_values[24]}",
-    f"Physical activity level={feature_values[25]}",
-    f"Depression={feature_values[26]}",
-    f"Anxiety={feature_values[27]}",
-    f"Intrusive rumination={feature_values[28]}",
-    f"Purposeful rumination={feature_values[29]}",
-    f"Resilience={feature_values[30]}",
-    f"Family support={feature_values[31]}"
-])
-
-    # 创建SHAP力图，确保中文显示
-    shap.force_plot(
-        base_value, 
-        shap_values_sample, 
-        features_with_values, 
-        matplotlib=True,  # 使用Matplotlib显示
-        show=False  # 不显示默认的力图窗口
+    # SHAP 力图
+    st.write("### SHAP 力图")
+    force_plot = shap.force_plot(
+        explainer.expected_value,
+        shap_values[0, :],
+        features[0, :],
+        feature_names=list(feature_ranges.keys()),
+        matplotlib=True,
+        show=False
     )
+    st.pyplot(force_plot)
 
-    # 保存SHAP力图并展示
-    plt.savefig("shap_force_plot.png", bbox_inches='tight', dpi=600)
-    st.image("shap_force_plot.png")
+    # 保存SHAP力图为HTML文件并在Streamlit中显示
+    # shap.save_html('shap_plot.html', force_plot)
+    # st.components.v1.html(open('shap_plot.html').read(), height=600)
 

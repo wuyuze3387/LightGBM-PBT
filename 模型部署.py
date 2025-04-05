@@ -6,8 +6,12 @@ import shap
 import matplotlib.pyplot as plt
 from matplotlib.font_manager import FontProperties
 
+# 指定宋体字体路径
+font_path = 'C:/Windows/Fonts/simsun.ttc'  # Windows系统下的宋体字体路径
+font_prop = FontProperties(fname=font_path)
+
 # 设置matplotlib支持中文和负号
-plt.rcParams['font.sans-serif'] = ['SimSun']  # 使用宋体支持中文
+plt.rcParams['font.sans-serif'] = font_prop.get_name()
 plt.rcParams['axes.unicode_minus'] = False
 
 # 加载模型

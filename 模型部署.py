@@ -88,7 +88,7 @@ if st.button("预测"):
     shap_values = explainer.shap_values(features)
 
     # 获取基础值和第一个样本的 SHAP 值
-    base_value = explainer.expected_value[0]  # 确保索引正确
+    base_value = explainer.expected_value[0] if explainer.expected_value else 0  # 确保索引正确
     shap_values_sample = shap_values[0]
 
     # 定义特征名称和其对应的值

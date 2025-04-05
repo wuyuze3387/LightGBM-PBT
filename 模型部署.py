@@ -1,25 +1,26 @@
 import streamlit as st
 import joblib
 import numpy as np
+import pandas as pd
 import shap
 import matplotlib.pyplot as plt
-import matplotlib
+from matplotlib.font_manager import FontProperties, findfont
 
-# 强制使用 PDF 后端（无字体依赖）
-matplotlib.use('PDF')  # 必须在其他 matplotlib 导入前设置
+# 自动查找系统中的宋体字体
+font_prop = FontProperties(family='SimSun', size=14)
 
-# 配置全局字体参数
-plt.rcParams.update({
-    'font.sans-serif': ['SimSun', 'STSong'],  # 使用 PDF 内置中文字体
-    'axes.unicode_minus': False
-})
+# 设置matplotlib支持中文和负号
+plt.rcParams['font.sans-serif'] = font_prop.get_name()
+plt.rcParams['axes.unicode_minus'] = False
 
 # 加载模型
-model = joblib.load("LGBMRegressor.pkl")
+model_path = "LGBMRegressor.pkl"
+model = joblib.load(model_path)
 
-# 页面配置
-st.set_page_config(layout="wide", page_title="分娩心理创伤预测系统")
-st.title("🏥 分娩心理创伤风险预测与解释")
+# 设置页面配置和标题
+st.set_page_config(layout="wide", page_title="轻量级梯度提升回归模型预测与 SHAP 可视化", page_icon="💕👩‍⚕️🏥")
+st.title("💕👩‍⚕️🏥 轻量级梯度提升回归模型预测与 SHAP 可视化")
+st.write("通过输入所有变量的值进行单个样本分娩心理创伤的风险预测，可以得到该样本罹患分娩心理创伤的概率，并结合 SHAP 力图分析结果，有助于临床医护人员了解具体的风险因素和保护因素。")
 
 # 特征范围定义
 feature_ranges = {
@@ -57,59 +58,64 @@ feature_ranges = {
     "家庭支持": {"type": "numerical", "min": 0, "max": 10, "default": 0},
 }
 
-# 侧边栏输入
-st.sidebar.header("参数输入")
+# 动态生成输入项（保持不变）
+st.sidebar.header("变量输入区域")
+st.sidebar.write("请输入变量值：")
+
 feature_values = []
-for feature, props in feature_ranges.items():
-    if props["type"] == "numerical":
-        val = st.sidebar.number_input(
-            f"{feature} ({props['min']}-{props['max']})",
-            min_value=float(props["min"]),
-            max_value=float(props["max"]),
-            value=float(props["default"])
+for feature, properties in feature_ranges.items():
+    if properties["type"] == "numerical":
+        value = st.sidebar.number_input(
+            label=f"{feature} ({properties['min']} - {properties['max']})",
+            min_value=float(properties["min"]),
+            max_value=float(properties["max"]),
+            value=float(properties["default"]),
         )
-    else:
-        val = st.sidebar.selectbox(
-            f"{feature}", 
-            options=props["options"]
+    elif properties["type"] == "categorical":
+        value = st.sidebar.selectbox(
+            label=f"{feature} (Select a value)",
+            options=properties["options"],
         )
-    feature_values.append(val)
+    feature_values.append(value)
 
-# 预测与可视化
-if st.button("开始分析"):
+# 转换为模型输入格式
+features = np.array([feature_values])
+
+# 预测与 SHAP 可视化
+if st.button("预测"):
     # 模型预测
-    sample = np.array([feature_values])
-    pred = model.predict(sample)[0]
-    st.success(f"预测风险值：{pred:.2f}%")
-    
-    # SHAP 解释
-    explainer = shap.TreeExplainer(model)
-    shap_values = explainer.shap_values(sample)
-    
-    # 生成中文标签
-    labels = [f"{name}={val}" for name, val in zip(feature_ranges.keys(), feature_values)]
-    
-    # 创建 PDF 图像
-    fig = plt.figure(figsize=(20, 6))
-    shap.force_plot(
-        explainer.expected_value,
-        shap_values[0],
-        features=labels,
-        matplotlib=True,
-        show=False,
-        text_rotation=15  # 防止文字重叠
-    )
-    
-    # 保存并显示图像
-    fig.savefig("shap_output.pdf", bbox_inches='tight', dpi=300)
-    
-    # 转换为 PNG 显示
-    import pdf2image
-    images = pdf2image.convert_from_path("shap_output.pdf")
-    images[0].save("shap_output.png", "PNG")
-    st.image("shap_output.png")
+    predicted_value = model.predict(features)[0]
+    st.write(f"预测分娩心理创伤评分: {predicted_value:.2f}%")
 
-    # 清理临时文件
+    # SHAP 解释器
+    explainer = shap.TreeExplainer(model)
+    shap_values = explainer.shap_values(features)
+
+    # 获取基础值和第一个样本的 SHAP 值
+    base_value = explainer.expected_value
+    shap_values_sample = shap_values[0]
+
+    # 关键修改点：动态生成中文特征标签
+    features_with_values = np.array([
+        f"{feature_name}={value}" 
+        for feature_name, value in zip(feature_ranges.keys(), feature_values)
+    ])
+
+    # 创建SHAP力图
+    plt.figure(figsize=(20, 6))
+    shap.force_plot(
+        base_value, 
+        shap_values_sample, 
+        features_with_values,
+        matplotlib=True,
+        show=False
+    )
+
+    # 保存并展示图像
+    plt.savefig("shap_force_plot.png", bbox_inches='tight', dpi=600)
+    st.image("shap_force_plot.png")
+
+    # 可选：添加清除临时文件的逻辑
     import os
-    os.remove("shap_output.pdf")
-    os.remove("shap_output.png")
+    if os.path.exists("shap_force_plot.png"):
+        os.remove("shap_force_plot.png")

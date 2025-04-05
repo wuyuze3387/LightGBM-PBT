@@ -4,13 +4,9 @@ import numpy as np
 import pandas as pd
 import shap
 import matplotlib.pyplot as plt
-from matplotlib.font_manager import FontProperties, findfont
-
-# 自动查找系统中的宋体字体
-font_prop = FontProperties(family='SimSun', size=14)
 
 # 设置matplotlib支持中文和负号
-plt.rcParams['font.sans-serif'] = font_prop.get_name()
+plt.rcParams['font.sans-serif'] = ['SimSun']  # 使用SimSun字体支持中文
 plt.rcParams['axes.unicode_minus'] = False
 
 # 加载模型
@@ -108,7 +104,8 @@ if st.button("预测"):
         shap_values_sample, 
         features_with_values,
         matplotlib=True,
-        show=False
+        show=False,
+        fontproperties=plt.rcParams['font.sans-serif']
     )
 
     # 保存并展示图像

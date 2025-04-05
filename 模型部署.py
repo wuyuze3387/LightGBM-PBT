@@ -54,7 +54,8 @@ feature_ranges = {
     "心理弹性": {"type": "numerical", "min": 6, "max": 30, "default": 6},
     "家庭支持": {"type": "numerical", "min": 0, "max": 10, "default": 0},
 }
-# 动态生成输入项
+
+# 动态生成输入项（保持不变）
 st.sidebar.header("变量输入区域")
 st.sidebar.write("请输入变量值：")
 
@@ -81,7 +82,7 @@ features = np.array([feature_values])
 if st.button("预测"):
     # 模型预测
     predicted_value = model.predict(features)[0]
-    st.write(f"Predicted 分娩心理创伤 score: {predicted_value:.2f}%")
+    st.write(f"预测分娩心理创伤评分: {predicted_value:.2f}%")
 
     # SHAP 解释器
     explainer = shap.TreeExplainer(model)
@@ -91,53 +92,27 @@ if st.button("预测"):
     base_value = explainer.expected_value
     shap_values_sample = shap_values[0]
 
-    # 定义特征名称和其对应的值
+    # 关键修改点：动态生成中文特征标签
     features_with_values = np.array([
-    f"Age={feature_values[0]}",
-    f"Weight={feature_values[1]}",
-    f"Residence={feature_values[2]}",
-    f"Marriage={feature_values[3]}",
-    f"Employment={feature_values[4]}",
-    f"Education={feature_values[5]}",
-    f"Insurance={feature_values[6]}",
-    f"Pregnancies={feature_values[7]}",
-    f"Deliveries={feature_values[8]}",
-    f"Delivery Method={feature_values[9]}",
-    f"Adverse Pregnancy History={feature_values[10]}",
-    f"Terminated Pregnancy={feature_values[11]}",
-    f"Pregnancy Weeks={feature_values[12]}",
-    f"Comorbidities={feature_values[13]}",
-    f"Complications={feature_values[14]}",
-    f"Feeding={feature_values[15]}",
-    f"Newborn Defects={feature_values[16]}",
-    f"Monthly Income Per Capita={feature_values[17]}",
-    f"Painless Childbirth={feature_values[18]}",
-    f"Intra_pain={feature_values[19]}",
-    f"Post_Pain={feature_values[20]}",
-    f"Care Methods={feature_values[21]}",
-    f"Sleep Quality={feature_values[22]}",
-    f"Sleep Time={feature_values[23]}",
-    f"Fatigue={feature_values[24]}",
-    f"Activity={feature_values[25]}",
-    f"Dep={feature_values[26]}",
-    f"Anx={feature_values[27]}",
-    f"Intrusive Rumination={feature_values[28]}",
-    f"Purposeful Rumination={feature_values[29]}",
-    f"Resilience={feature_values[30]}",
-    f"Fami_Supp={feature_values[31]}"
-])
+        f"{feature_name}={value}" 
+        for feature_name, value in zip(feature_ranges.keys(), feature_values)
+    ])
 
-# 创建SHAP力图，确保中文显示
-plt.figure(figsize=(20, 6))  # 设置图形尺寸为20x6英寸
-shap.force_plot(
-    base_value, 
-    shap_values_sample, 
-    features_with_values, 
-    matplotlib=True,  # 使用Matplotlib显示
-    show=False  # 不显示默认的力图窗口
-)
+    # 创建SHAP力图
+    plt.figure(figsize=(20, 6))
+    shap.force_plot(
+        base_value, 
+        shap_values_sample, 
+        features_with_values,
+        matplotlib=True,
+        show=False
+    )
 
+    # 保存并展示图像
+    plt.savefig("shap_force_plot.png", bbox_inches='tight', dpi=600)
+    st.image("shap_force_plot.png")
 
-# 保存SHAP力图并展示
-plt.savefig("shap_force_plot.png", bbox_inches='tight', dpi=600)
-st.image("shap_force_plot.png")
+    # 可选：添加清除临时文件的逻辑
+    import os
+    if os.path.exists("shap_force_plot.png"):
+        os.remove("shap_force_plot.png")

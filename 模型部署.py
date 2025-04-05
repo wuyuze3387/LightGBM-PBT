@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 from matplotlib.font_manager import FontProperties
 
 # 设置matplotlib支持中文和负号
-plt.rcParams['font.sans-serif'] = ['SimHei']  # 使用SimHei字体支持中文
+plt.rcParams['font.sans-serif'] = ['Microsoft YaHei']  # 使用微软雅黑字体支持中文
 plt.rcParams['axes.unicode_minus'] = False
 
 # 加载模型

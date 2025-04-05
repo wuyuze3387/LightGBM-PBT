@@ -6,6 +6,15 @@ import shap
 import matplotlib.pyplot as plt
 from matplotlib.font_manager import FontProperties
 
+import matplotlib.pyplot as plt
+from matplotlib.font_manager import FontProperties
+
+# 指定微软雅黑字体路径
+font_path = 'C:/Windows/Fonts/msyh.ttc'  # Windows系统下的微软雅黑字体路径
+font_prop = FontProperties(fname=font_path)
+
+plt.rcParams['font.sans-serif'] = font_prop.get_name()
+plt.rcParams['axes.unicode_minus'] = False
 # 设置matplotlib支持中文和负号
 plt.rcParams['font.sans-serif'] = ['Microsoft YaHei']  # 使用微软雅黑字体支持中文
 plt.rcParams['axes.unicode_minus'] = False
